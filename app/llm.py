@@ -61,8 +61,6 @@ class LLMClient:
 
         if self._provider == "groq":
             return await self._call_groq(names)
-        elif self._provider == "gemini":
-            return await self._call_gemini(names)
         else:
             raise LLMNotConfiguredError(f"Unknown LLM provider: '{self._provider}'. Use 'groq' or 'gemini'")
 
@@ -83,23 +81,6 @@ class LLMClient:
         data = response.json()
         text = data["choices"][0]["message"]["content"]
         return _parse_json_response(text)
-
-    async def _call_gemini(self, names: list[str]) -> dict[str, str | None]:
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/{self._model}"
-            f":generateContent?key={self._api_key}"
-        )
-        payload = {
-            "contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n{json.dumps(names)}"}]}],
-            "generationConfig": {"temperature": 0.0},
-        }
-
-        response = await self._http.post(url, json=payload)
-        response.raise_for_status()
-        data = response.json()
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        return _parse_json_response(text)
-
 
 def _parse_json_response(text: str) -> dict[str, str | None]:
     """Extract JSON from LLM response, stripping markdown fences if present."""
