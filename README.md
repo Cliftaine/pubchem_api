@@ -127,7 +127,7 @@ pubchem_api/
 │   ├── models.py             # Pydantic schemas (HazardInfo, ProductResult)
 │   ├── pubchem.py            # Async client for PubChem PUG-View and PUG-REST
 │   ├── handlers.py           # Business logic (handle_by_ids, handle_by_names)
-│   ├── llm.py                # Multi-provider LLM client (Groq / Gemini)
+│   ├── llm.py                # LLM client (Groq)
 │   └── cache.py              # In-memory LRU cache with pickle persistence
 ```
 

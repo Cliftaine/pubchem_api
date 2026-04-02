@@ -62,7 +62,7 @@ class LLMClient:
         if self._provider == "groq":
             return await self._call_groq(names)
         else:
-            raise LLMNotConfiguredError(f"Unknown LLM provider: '{self._provider}'. Use 'groq' or 'gemini'")
+            raise LLMNotConfiguredError(f"Unknown LLM provider: '{self._provider}'. Use 'groq'")
 
     async def _call_groq(self, names: list[str]) -> dict[str, str | None]:
         url = "https://api.groq.com/openai/v1/chat/completions"
