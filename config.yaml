@@ -8,6 +8,6 @@ pubchem:
   timeout: 30.0
 
 llm:
-  provider: "groq"  # "groq" or "gemini"
+  provider: "groq"  # "groq"
   api_key: ""  # Set your Groq API key here
   model: "llama-3.3-70b-versatile"
