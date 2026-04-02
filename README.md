@@ -22,9 +22,8 @@ The server starts by default on `http://localhost:8080` (configurable in `config
 
 ## LLM configuration (Groq)
 
-The API uses an LLM to resolve names that PubChem cannot find directly (e.g. "agua oxigenada", "lejia", "soda caustica"). We use **Groq** with the `llama-3.3-70b-versatile` model.
-
-A trial API key will be shared for testing purposes and will expire in 7 days.
+The API uses an LLM to resolve names that PubChem cannot find directly. 
+We use **Groq** with the `llama-3.3-70b-versatile` model.
 
 To enable the LLM, set your Groq API key in `config.yaml`:
 
@@ -66,7 +65,7 @@ Exactly **one** of the two must be provided, not both.
 
 While it is technically possible to send a JSON body in a GET request, doing so is not considered good practice. The HTTP/1.1 spec does not forbid it, but many clients, proxies, and caching layers may ignore or discard the body of a GET request. Additionally, frameworks like FastAPI and tools like Swagger UI do not support GET request bodies well.
 
-The standard approach for sending lists in a GET request is through **query parameters** — either as comma-separated values (`?cids=887,702,2244`) or as repeated parameters (`?cids=887&cids=702&cids=2244`). This implementation uses comma-separated values as it is more concise and readable. This is the same pattern used by major APIs like PubChem itself.
+The standard approach for sending lists in a GET request is through **query parameters** — either as comma-separated values (`?cids=887,702,2244`) or as repeated parameters (`?cids=887&cids=702&cids=2244`). This implementation uses comma-separated values as it is more concise and readable.
 
 ### Examples
 
@@ -141,7 +140,7 @@ User-provided names
        │
        ▼
   ┌─────────────────────┐
-  │  Cache check        │  Returns immediately for previously
+  │  Step 1: Cache check  │  Returns immediately for previously
   │  (in-memory LRU)    │  resolved names — no API calls needed
   └────────┬────────────┘
            │
@@ -149,7 +148,7 @@ User-provided names
            │
            ▼
   ┌─────────────────────┐
-  │  Pass 1: PubChem    │  Looks up each name directly in PubChem
+  │  Step 2: PubChem    │  Looks up each name directly in PubChem
   │  (direct lookup)    │  e.g. "methanol" → CID 887 ✓
   └────────┬────────────┘
            │
@@ -157,7 +156,7 @@ User-provided names
            │
            ▼
   ┌─────────────────────┐
-  │  Pass 2: LLM        │  Translates common/commercial/non-English names
+  │  Step 3: LLM        │  Translates common/commercial/non-English names
   │  (fallback)         │  into standard English chemical names
   │                     │  e.g. "agua oxigenada" → "hydrogen peroxide"
   └────────┬────────────┘
