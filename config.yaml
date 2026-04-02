@@ -1,0 +1,13 @@
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+pubchem:
+  base_url: "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound"
+  max_concurrent_requests: 5
+  timeout: 30.0
+
+llm:
+  provider: "groq"  # "groq" or "gemini"
+  api_key: ""  # Set your Groq API key here
+  model: "llama-3.3-70b-versatile"
